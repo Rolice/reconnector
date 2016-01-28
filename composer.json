@@ -2,7 +2,7 @@
   "name": "rolice/reconnector",
   "description": "Connector replacement for Laravel 5.1+ that allows reconnection with a list of different MySQL hosts.",
   "type": "library",
-  "version": "0.1",
+  "version": "1.0",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
