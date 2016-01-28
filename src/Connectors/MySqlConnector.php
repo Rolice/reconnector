@@ -13,7 +13,7 @@ class MySqlConnector extends LaravelMySqlConnector
      * Get the DSN string for a host / port configuration.
      *
      * @param  array $config
-     * @return string
+     * @return mixed
      */
     protected function getHostDsn(array $config)
     {
@@ -23,6 +23,7 @@ class MySqlConnector extends LaravelMySqlConnector
          * @var string $host
          * @var int $port
          * @var string $database
+         * @return string
          */
 
         $result = function ($host, $port, $database) {
@@ -35,6 +36,7 @@ class MySqlConnector extends LaravelMySqlConnector
 
         /**
          * @var array $host
+         * @return array
          */
         foreach ($host as $h) {
             yield $result($h, $port, $database);
