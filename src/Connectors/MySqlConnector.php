@@ -47,7 +47,8 @@ class MySqlConnector extends LaravelMySqlConnector
      * @param  string $dsn
      * @param  array $config
      * @param  array $options
-     * @return \PDO
+     * @return PDO
+     * @throws Exception
      */
     public function createConnection($dsn, array $config, array $options)
     {
