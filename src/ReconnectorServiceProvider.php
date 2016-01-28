@@ -2,6 +2,7 @@
 namespace Rolice\Reconnector;
 
 use Illuminate\Support\ServiceProvider;
+use Rolice\Reconnector\Connectors\ConnectionFactory;
 
 /**
  * ReconnectorServiceProvider for Laravel 5.1+
@@ -13,56 +14,25 @@ class ReconnectorServiceProvider extends ServiceProvider
 {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->publishes([__DIR__ . '/../config/econt.php' => config_path('econt.php')], 'config');
-        $this->publishes([__DIR__ . '/../database/migrations/' => database_path('migrations')], 'migrations');
-
-        $this->mergeConfigFrom(__DIR__ . '/../config/econt.php', 'econt');
-
-        $this->loadTranslationsFrom($this->app->basePath(). '/vendor/rolice/econt/resources/lang', 'econt');
-
-        if (!$this->app->routesAreCached()) {
-            require __DIR__ . '/Http/routes.php';
-        }
-    }
-
-    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->singleton('Econt', function () {
-            return new Econt;
+        // The connection factory is used to create the actual connection instances on
+        // the database. We will inject the factory into the manager so that it may
+        // make the connections while they are actually needed and not of before.
+        $this->app->singleton('db.factory', function ($app) {
+            return new ConnectionFactory($app);
         });
 
-        $this->app['sync'] = $this->app->share(function ($app) {
-            return new Sync;
+        // The database manager is used to resolve various connections, since multiple
+        // connections might be managed. It also implements the connection resolver
+        // interface which may be used by other components requiring connections.
+        $this->app->singleton('db', function ($app) {
+            return new DatabaseManager($app, $app['db.factory']);
         });
-
-        $this->commands('sync');
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['Econt'];
-    }
 }
