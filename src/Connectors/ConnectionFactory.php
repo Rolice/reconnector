@@ -4,6 +4,7 @@ namespace Rolice\Reconnector\Connectors;
 use InvalidArgumentException;
 use Illuminate\Database\Connectors;
 use Illuminate\Database\Connectors\ConnectionFactory as LaravelConnectionFactory;
+use Rolice\Reconnector\Connectors\MySqlConnector;
 
 class ConnectionFactory extends LaravelConnectionFactory
 {
@@ -27,7 +28,7 @@ class ConnectionFactory extends LaravelConnectionFactory
 
         switch ($config['driver']) {
             case 'mysql':
-                return new Connectors\MySqlConnector;
+                return new MySqlConnector;
 
             case 'pgsql':
                 return new Connectors\PostgresConnector;
