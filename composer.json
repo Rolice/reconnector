@@ -1,0 +1,31 @@
+{
+  "name": "rolice/reconnector",
+  "description": "Connector replacement for Laravel 5.1+ that allows reconnection with a list of different MySQL hosts.",
+  "type": "library",
+  "version": "0.1",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Lyubomir Gardev",
+      "email": "rolice@intellisys.org"
+    }
+  ],
+  "require": {
+    "illuminate/support": "5.1+"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rolice\\Reconnector\\": "src",
+      "Rolice\\Reconnector\\Connectors\\": "src/Connectors/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rolice\\Reconnector\\Test\\": "tests/"
+    }
+  }
+}
