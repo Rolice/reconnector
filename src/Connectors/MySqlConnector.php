@@ -2,7 +2,10 @@
 namespace Rolice\Reconnector\Connectors;
 
 use PDO;
+use App;
+use Config;
 use Exception;
+use PDOException;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Connectors\MySqlConnector as LaravelMySqlConnector;
 
@@ -71,6 +74,8 @@ class MySqlConnector extends LaravelMySqlConnector
                 );
             }
 
+            $this->isClusterNodeReady($pdo);
+
             return $pdo;
         };
 
@@ -89,4 +94,19 @@ class MySqlConnector extends LaravelMySqlConnector
         return $create_pdo($dsn, $username, $password, $options);
     }
 
+    /**
+     * Checks if PDO connection is made with "ready" server (check for clusters).
+     * @param PDO $pdo
+     * @throws PDOException
+     */
+    private function isClusterNodeReady(PDO $pdo)
+    {
+        if ('local' === App::environment() || !Config::get('database.clustered')) {
+            return;
+        }
+
+        if ('PRIMARY' !== mb_strtoupper($pdo->query("SHOW status LIKE 'wsrep_cluster_status'")->fetchColumn(1))) {
+            throw new PDOException('MySQL node is a part of not nonoperational component.');
+        }
+    }
 }
