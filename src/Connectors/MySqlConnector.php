@@ -101,7 +101,7 @@ class MySqlConnector extends LaravelMySqlConnector
      */
     private function isClusterNodeReady(PDO $pdo)
     {
-        if ('local' === App::environment() || !Config::get('database.clustered')) {
+        if ('local' === App::environment() || !Config::get('reconnector.clustered')) {
             return;
         }
 

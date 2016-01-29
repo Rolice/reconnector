@@ -14,6 +14,16 @@ class ReconnectorServiceProvider extends ServiceProvider
 {
 
     /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([__DIR__ . '/../config/reconnector.php' => config_path('reconnector.php')], 'config');
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
